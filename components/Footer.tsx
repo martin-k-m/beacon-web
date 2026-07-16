@@ -10,7 +10,6 @@ const groups: { title: string; links: FooterLink[] }[] = [
       { label: 'Features', href: '/#features' },
       { label: 'Docs', href: '/docs' },
       { label: 'Showcase', href: '/showcase' },
-      { label: 'Pricing', href: '/pricing' },
     ],
   },
   {

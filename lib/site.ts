@@ -42,13 +42,12 @@ export const site = {
 
 /**
  * Primary navigation. Anchors use absolute `/#…` targets so they resolve from
- * the sub-routes (/docs, /showcase, /pricing) too, not just the landing page.
+ * the sub-routes (/docs, /showcase) too, not just the landing page.
  */
 export const nav = [
   { label: 'Features', href: '/#features' },
   { label: 'Docs', href: '/docs' },
   { label: 'Showcase', href: '/showcase' },
-  { label: 'Pricing', href: '/pricing' },
 ] as const;
 
 /**
@@ -443,40 +442,3 @@ export const docsSections = [
   { id: 'self-hosting', label: 'Self-hosting' },
 ] as const;
 
-/* -------------------------------------------------------------------------- */
-/*  Pricing (open-source honest)                                             */
-/* -------------------------------------------------------------------------- */
-
-export type PricingTier = {
-  name: string;
-  price: string;
-  cadence?: string;
-  tagline: string;
-  features: string[];
-  cta: { label: string; href: string; external?: boolean };
-  highlight?: boolean;
-};
-
-/**
- * Beacon is free and open source (MIT) — the whole platform, self-hosted, with
- * no paywalled features. This is the single, real offering.
- */
-export const pricingTiers: PricingTier[] = [
-  {
-    name: 'Open Source',
-    price: 'Free',
-    cadence: 'forever',
-    tagline: 'The whole platform. Self-hosted. MIT licensed.',
-    highlight: true,
-    features: [
-      'Beacon Score across all five pillars',
-      'CLI, SDK, REST API, and dashboard',
-      'All six embeddable widgets + badges',
-      'Self-hostable GitHub App (webhook re-scoring)',
-      'Background worker + historical health trends',
-      'Pluggable AI summaries (heuristic / OpenAI / Anthropic)',
-      'No seat limits — run it on your own infrastructure',
-    ],
-    cta: { label: 'Get it on GitHub', href: site.github, external: true },
-  },
-];

@@ -65,8 +65,6 @@ sync with `@beacon/core` in the tool repo.
   self-hosting.
 - **`/showcase`** — a gallery of the embeddable widgets in dark/light themes
   with copy-paste embed snippets and "in context" mockups (all sample data).
-- **`/pricing`** — Beacon is free and open source (MIT), self-hosted, with no
-  paywalled features.
 
 All widget previews on the site are **self-drawn inline SVGs with sample
 data**, clearly labelled — they resemble the real widgets but are not live
@@ -99,7 +97,6 @@ app/
   page.tsx                   Landing page composition
   docs/                      /docs — primary documentation (sidebar + sections)
   showcase/                  /showcase — widget gallery + in-context mockups
-  pricing/                   /pricing — open-source honest pricing
 components/
   Nav / Hero / HeroBeacon    Header + hero with the lighthouse-sweep visual
   Features                   Repository-intelligence capabilities (incl. widgets,
@@ -115,8 +112,7 @@ components/
   widgets/previews           Self-drawn inline-SVG widget previews (sample data)
   Reveal / SectionHeading    Shared scroll-reveal + heading primitives
 lib/site.ts     Copy, links, pillars, grades, ecosystem, widgets, GitHub App
-                events, CLI, API endpoints, env vars, pricing — accuracy rule
-                lives here
+                events, CLI, API endpoints, env vars — accuracy rule lives here
 ```
 
 ## Deployment
