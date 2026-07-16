@@ -5,7 +5,6 @@ import { DemoDashboard } from '@/components/DemoDashboard';
 import { WidgetsTeaser } from '@/components/WidgetsTeaser';
 import { OpenSource } from '@/components/OpenSource';
 import { ArchitectureDiagram } from '@/components/ArchitectureDiagram';
-import { Ecosystem } from '@/components/Ecosystem';
 import { Footer } from '@/components/Footer';
 
 export default function Home() {
@@ -21,7 +20,6 @@ export default function Home() {
         <WidgetsTeaser />
         <OpenSource />
         <ArchitectureDiagram />
-        <Ecosystem />
       </main>
       <Footer />
     </>

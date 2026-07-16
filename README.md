@@ -59,7 +59,7 @@ sync with `@beacon/core` in the tool repo.
 ## Pages
 
 - **`/`** — landing page: hero, features, sample dashboard, widget teaser,
-  open source, architecture, ecosystem.
+  open source, architecture.
 - **`/docs`** — the primary documentation (sidebar + content): introduction,
   quickstart, the Beacon Score, widgets, GitHub App, CLI, REST API, and
   self-hosting.
@@ -105,14 +105,13 @@ components/
   WidgetsTeaser              Landing-page widget preview section
   OpenSource                 Honest open-source facts + monorepo contents
   ArchitectureDiagram        GitHub API → engine → CLI / API / dashboard
-  Ecosystem                  Blink Dev lifecycle (Create/Build/Protect/Understand)
-  Footer                     Links + Blink Dev ecosystem
+  Footer                     Links + license
   CodeBlock                  Copy-to-clipboard code block
   docs/DocsSidebar           Scroll-spy sidebar for /docs
   widgets/previews           Self-drawn inline-SVG widget previews (sample data)
   Reveal / SectionHeading    Shared scroll-reveal + heading primitives
-lib/site.ts     Copy, links, pillars, grades, ecosystem, widgets, GitHub App
-                events, CLI, API endpoints, env vars — accuracy rule lives here
+lib/site.ts     Copy, links, pillars, grades, widgets, GitHub App events,
+                CLI, API endpoints, env vars — accuracy rule lives here
 ```
 
 ## Deployment

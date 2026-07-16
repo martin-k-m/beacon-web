@@ -148,47 +148,6 @@ export const monorepo: RepoPart[] = [
   },
 ];
 
-/**
- * The Blink Dev ecosystem — sibling project sites, framed as a product
- * lifecycle (Create → Build → Protect → Understand). These are navigation
- * links to other properties, not feature claims. `current: true` on this site.
- */
-export type EcosystemProject = {
-  name: string;
-  stage: string;
-  description: string;
-  url: string;
-  current?: boolean;
-};
-
-export const ecosystem: EcosystemProject[] = [
-  {
-    name: 'Blink',
-    stage: 'Create',
-    description: 'Fast developer tooling for modern workflows.',
-    url: 'https://blinkdev.me',
-  },
-  {
-    name: 'Flux',
-    stage: 'Build',
-    description: 'Local-first build & automation engine.',
-    url: 'https://flux.blinkdev.me',
-  },
-  {
-    name: 'Killer',
-    stage: 'Protect',
-    description: 'Security testing platform for Rust.',
-    url: 'https://killer.blinkdev.me',
-  },
-  {
-    name: 'Beacon',
-    stage: 'Understand',
-    description: 'Repository intelligence & health scores.',
-    url: 'https://beacon.blinkdev.me',
-    current: true,
-  },
-];
-
 /* -------------------------------------------------------------------------- */
 /*  Embeddable widgets                                                        */
 /* -------------------------------------------------------------------------- */
