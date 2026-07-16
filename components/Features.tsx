@@ -9,6 +9,9 @@ import {
   SparkleIcon,
   DependencyIcon,
   TimelineIcon,
+  WidgetIcon,
+  WebhookIcon,
+  HistoryIcon,
 } from './icons';
 
 const features = [
@@ -41,6 +44,21 @@ const features = [
     icon: DependencyIcon,
     title: 'Dependency & Security Signals',
     desc: 'Language breakdown plus dependency manifests and security signals — security policy, Dependabot, and vulnerability alerts — feed the Security pillar.',
+  },
+  {
+    icon: WidgetIcon,
+    title: 'Embeddable Widgets',
+    desc: 'Drop a live health card, activity graph, language, contributor, or release widget — or a compact badge — into any README or site as an SVG. Themeable (dark / light / transparent) and sizeable.',
+  },
+  {
+    icon: WebhookIcon,
+    title: 'GitHub App & Monitoring',
+    desc: 'A self-hostable GitHub App listens for push, pull_request, issues, release, star, and fork webhooks and re-scores a repository as it changes — no manual re-runs.',
+  },
+  {
+    icon: HistoryIcon,
+    title: 'Health History',
+    desc: 'Beacon snapshots scores over time, so you can see trends across 30, 90, and 365 days — “health improved 4% this month” instead of a single point in time.',
   },
 ];
 

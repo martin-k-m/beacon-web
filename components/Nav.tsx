@@ -24,7 +24,7 @@ export function Nav() {
       }`}
     >
       <div className="container-x flex h-16 items-center justify-between">
-        <a href="#top" className="group flex items-center gap-2.5">
+        <a href="/" className="group flex items-center gap-2.5">
           <Logo />
           <span className="font-mono text-sm font-semibold tracking-[0.2em] text-mist">
             BEACON

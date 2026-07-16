@@ -38,8 +38,9 @@ export function Hero() {
           className="mt-6 max-w-2xl text-balance text-base leading-relaxed text-muted sm:text-lg"
         >
           Beacon analyzes repository health, activity, contributors, and trends
-          into actionable insights — a single health score, five pillars, and an
-          AI summary for any <code className="text-mist">owner/repo</code>.
+          into actionable insights — a single health score, five pillars, an AI
+          summary, and <a href="/showcase" className="text-mist underline decoration-beacon/40 underline-offset-4 hover:decoration-beacon">embeddable widgets</a> for any{' '}
+          <code className="text-mist">owner/repo</code>.
         </motion.p>
 
         <motion.div

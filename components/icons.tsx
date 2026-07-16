@@ -150,3 +150,55 @@ export function ForkIcon(props: SVGProps<SVGSVGElement>) {
     </svg>
   );
 }
+
+/** Embeddable widget / badge card. */
+export function WidgetIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base} {...props}>
+      <rect x="3" y="5" width="18" height="14" rx="2" />
+      <path d="M3 10h18" />
+      <path d="M7 14h5M7 16.5h3" />
+      <circle cx="16.5" cy="15" r="1.6" />
+    </svg>
+  );
+}
+
+/** Webhook / GitHub App events. */
+export function WebhookIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M8.5 9.5a3.5 3.5 0 1 1 5 3.16" />
+      <path d="M12 12.7 8 19a3.5 3.5 0 1 1-2.3-1.2" />
+      <path d="M13 12.7 16 19a3.5 3.5 0 1 0 2.3-6.3" />
+      <path d="M7 19h6M15 12.9l3-.2" />
+    </svg>
+  );
+}
+
+/** Historical health / trend over time. */
+export function HistoryIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M3.5 12a8.5 8.5 0 1 0 2.6-6.1" />
+      <path d="M6 3.5V8h4.5" />
+      <path d="M12 8v4.2l3 1.8" />
+    </svg>
+  );
+}
+
+export function CheckIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M4.5 12.5 9 17l10.5-11" />
+    </svg>
+  );
+}
+
+export function CopyIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base} {...props}>
+      <rect x="9" y="9" width="12" height="12" rx="2" />
+      <path d="M15 5.5A1.5 1.5 0 0 0 13.5 4h-8A1.5 1.5 0 0 0 4 5.5v8A1.5 1.5 0 0 0 5.5 15" />
+    </svg>
+  );
+}

@@ -41,10 +41,37 @@ sync with `@beacon/core` in the tool repo.
 - **Repository intelligence** — a full snapshot from the GitHub API: metadata,
   languages, contributors, commit activity, releases, issues, PRs, README, and
   security signals.
+- **Embeddable widgets** — six SVG widgets (Repository Health Card, Activity
+  Graph, Language, Contributor, Release cards, and a Maintenance Badge) served
+  from a self-hosted Beacon instance, themeable (dark / light / transparent)
+  and sizeable.
+- **Self-hostable GitHub App** — receives `push`, `pull_request`, `issues`,
+  `release`, `star`, and `fork` webhooks and re-scores repositories as they
+  change (you register your own app; there is no public installable app).
+- **Historical analytics** — health snapshots over time, with trends over
+  30 / 90 / 365 days.
 - **AI "Beacon Summary"** — pluggable providers (offline heuristic by default,
   or OpenAI / Anthropic).
-- **Surfaces** — a `beacon analyze owner/repo` CLI, a Fastify REST API, and a
-  Next.js dashboard, all reading from the same `@beacon/core` engine.
+- **Surfaces** — a `beacon analyze | widget | badge | watch owner/repo` CLI, a
+  Fastify REST API, and a Next.js dashboard, all reading from the same
+  `@beacon/core` engine.
+
+## Pages
+
+- **`/`** — landing page: hero, features, sample dashboard, widget teaser,
+  open source, architecture, ecosystem.
+- **`/docs`** — the primary documentation (sidebar + content): introduction,
+  quickstart, the Beacon Score, widgets, GitHub App, CLI, REST API, and
+  self-hosting.
+- **`/showcase`** — a gallery of the embeddable widgets in dark/light themes
+  with copy-paste embed snippets and "in context" mockups (all sample data).
+- **`/pricing`** — an honest open-source pricing page: a real free
+  self-hosted (MIT) tier plus clearly-labelled *Planned* hosted tiers (not
+  purchasable).
+
+All widget previews on the site are **self-drawn inline SVGs with sample
+data**, clearly labelled — they resemble the real widgets but are not live
+analyses.
 
 ## Stack
 
@@ -69,17 +96,28 @@ npm run build    # static export to ./out
 ## Structure
 
 ```
-app/            Layout, metadata, global styles, page composition
+app/
+  page.tsx                   Landing page composition
+  docs/                      /docs — primary documentation (sidebar + sections)
+  showcase/                  /showcase — widget gallery + in-context mockups
+  pricing/                   /pricing — open-source honest pricing
 components/
   Nav / Hero / HeroBeacon    Header + hero with the lighthouse-sweep visual
-  Features                   The six repository-intelligence capabilities
+  Features                   Repository-intelligence capabilities (incl. widgets,
+                             GitHub App, health history)
   DemoDashboard              Sample repo dashboard (labeled demo data)
+  WidgetsTeaser              Landing-page widget preview section
   OpenSource                 Honest open-source facts + monorepo contents
   ArchitectureDiagram        GitHub API → engine → CLI / API / dashboard
   Ecosystem                  Blink Dev lifecycle (Create/Build/Protect/Understand)
   Footer                     Links + Blink Dev ecosystem
+  CodeBlock                  Copy-to-clipboard code block
+  docs/DocsSidebar           Scroll-spy sidebar for /docs
+  widgets/previews           Self-drawn inline-SVG widget previews (sample data)
   Reveal / SectionHeading    Shared scroll-reveal + heading primitives
-lib/site.ts     Copy, links, pillars, grades, ecosystem — accuracy rule lives here
+lib/site.ts     Copy, links, pillars, grades, ecosystem, widgets, GitHub App
+                events, CLI, API endpoints, env vars, pricing — accuracy rule
+                lives here
 ```
 
 ## Deployment

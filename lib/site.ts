@@ -40,11 +40,15 @@ export const site = {
   cliCommand: 'beacon analyze owner/repo',
 } as const;
 
+/**
+ * Primary navigation. Anchors use absolute `/#…` targets so they resolve from
+ * the sub-routes (/docs, /showcase, /pricing) too, not just the landing page.
+ */
 export const nav = [
-  { label: 'Features', href: '#features' },
-  { label: 'Demo', href: '#demo' },
-  { label: 'Open source', href: '#open-source' },
-  { label: 'Architecture', href: '#architecture' },
+  { label: 'Features', href: '/#features' },
+  { label: 'Docs', href: '/docs' },
+  { label: 'Showcase', href: '/showcase' },
+  { label: 'Pricing', href: '/pricing' },
 ] as const;
 
 /**
@@ -183,5 +187,328 @@ export const ecosystem: EcosystemProject[] = [
     description: 'Repository intelligence & health scores.',
     url: 'https://beacon.blinkdev.me',
     current: true,
+  },
+];
+
+/* -------------------------------------------------------------------------- */
+/*  Embeddable widgets                                                        */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * Beacon serves embeddable SVG widgets from its own API. Beacon is SELF-HOSTED
+ * — there is no public hosted beacon.dev service — so every embed URL on this
+ * site uses a `<your-beacon-host>` placeholder (or `beacon.example.com`), never
+ * a claim that a hosted endpoint is live.
+ */
+export const embed = {
+  /** Placeholder host used in copy-paste snippets. */
+  hostPlaceholder: '<your-beacon-host>',
+  exampleHost: 'beacon.example.com',
+  /** The rich widget endpoint: /widget/repo/:owner/:repo */
+  widgetBase: 'https://<your-beacon-host>/widget/repo',
+  /** The compact badge endpoint: /badge/:owner/:repo */
+  badgeBase: 'https://<your-beacon-host>/badge',
+  themes: ['dark', 'light', 'transparent'] as const,
+  sizes: ['small', 'medium', 'large'] as const,
+  /** Sample repo used throughout previews — clearly fictional demo data. */
+  sampleRepo: 'beacon-labs/aurora',
+} as const;
+
+export type WidgetTheme = (typeof embed.themes)[number];
+
+export type WidgetDef = {
+  /** Stable id, also used as the `type` query param on the widget endpoint. */
+  key: string;
+  name: string;
+  /** Which endpoint serves it. */
+  endpoint: 'widget' | 'badge';
+  blurb: string;
+};
+
+/**
+ * The six embeddable widget types. `endpoint: 'widget'` widgets are served by
+ * `/widget/repo/:owner/:repo` (the type selected via the `type` query param);
+ * the Maintenance Badge is served by the compact `/badge/:owner/:repo`
+ * endpoint. All accept `?theme=` and `?size=`.
+ */
+export const widgets: WidgetDef[] = [
+  {
+    key: 'health',
+    name: 'Repository Health Card',
+    endpoint: 'widget',
+    blurb:
+      'The headline Beacon Score with its grade and the five pillar bars — the full-health snapshot in one card.',
+  },
+  {
+    key: 'activity',
+    name: 'Activity Graph',
+    endpoint: 'widget',
+    blurb: 'Weekly commit volume over the last year, drawn as a compact trend.',
+  },
+  {
+    key: 'language',
+    name: 'Language Card',
+    endpoint: 'widget',
+    blurb: 'The repository language breakdown as a stacked bar with a legend.',
+  },
+  {
+    key: 'contributor',
+    name: 'Contributor Card',
+    endpoint: 'widget',
+    blurb: 'Top contributors and the balance of external contribution.',
+  },
+  {
+    key: 'release',
+    name: 'Release Card',
+    endpoint: 'widget',
+    blurb: 'The latest tagged release — version, name, and date.',
+  },
+  {
+    key: 'maintenance',
+    name: 'Maintenance Badge',
+    endpoint: 'badge',
+    blurb: 'A shields-style badge — the Beacon grade at a glance for any README.',
+  },
+];
+
+/* -------------------------------------------------------------------------- */
+/*  GitHub App / monitoring                                                   */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * Webhook events the (self-hostable) GitHub App subscribes to. Beacon re-scores
+ * a repository when these arrive. There is NO public installable app — a user
+ * registers their own GitHub App against their Beacon instance.
+ */
+export const githubAppEvents = [
+  { event: 'push', desc: 'New commits land — activity and maintenance refresh.' },
+  { event: 'pull_request', desc: 'PRs opened, merged, or closed feed throughput.' },
+  { event: 'issues', desc: 'Issue open/close activity feeds the Maintenance pillar.' },
+  { event: 'release', desc: 'A new tagged release updates cadence and the Release card.' },
+  { event: 'star', desc: 'Stargazer changes update community signals.' },
+  { event: 'fork', desc: 'Forks update community signals.' },
+] as const;
+
+/* -------------------------------------------------------------------------- */
+/*  CLI reference                                                             */
+/* -------------------------------------------------------------------------- */
+
+export type CliCommand = {
+  command: string;
+  summary: string;
+  example: string;
+  output: string;
+};
+
+export const cliCommands: CliCommand[] = [
+  {
+    command: 'beacon analyze owner/repo',
+    summary: 'Run a full analysis and print the score, pillars, and summary.',
+    example: 'beacon analyze beacon-labs/aurora',
+    output: `beacon-labs/aurora
+Beacon Score  92 / 100   Excellent
+  Activity        95   ██████████
+  Community       88   █████████
+  Maintenance     90   █████████
+  Documentation   94   ██████████
+  Security        90   █████████
+Summary  Thriving, well-maintained project — watch the bus factor.`,
+  },
+  {
+    command: 'beacon widget owner/repo',
+    summary: 'Print an embeddable widget SVG (or a URL) for the repository.',
+    example: 'beacon widget beacon-labs/aurora --type health --theme dark',
+    output: `<svg width="400" height="180" ...>  <!-- Repository Health Card -->
+… writes health-card.svg`,
+  },
+  {
+    command: 'beacon badge owner/repo',
+    summary: 'Emit a compact Markdown/HTML badge snippet for a README.',
+    example: 'beacon badge beacon-labs/aurora --theme dark',
+    output: `![Beacon](https://<your-beacon-host>/badge/beacon-labs/aurora?theme=dark)`,
+  },
+  {
+    command: 'beacon watch owner/repo',
+    summary: 'Track a repository over time and report health trend changes.',
+    example: 'beacon watch beacon-labs/aurora',
+    output: `watching beacon-labs/aurora …
+2026-07-16  92  (+3 this month)  Excellent  ↑ trending up`,
+  },
+];
+
+/* -------------------------------------------------------------------------- */
+/*  REST API                                                                  */
+/* -------------------------------------------------------------------------- */
+
+export type ApiEndpoint = {
+  method: 'GET' | 'POST';
+  path: string;
+  desc: string;
+};
+
+export const apiEndpoints: ApiEndpoint[] = [
+  {
+    method: 'POST',
+    path: '/api/analyze',
+    desc: 'Analyze a repository on demand — body { owner, repo } — returns the full analysis.',
+  },
+  {
+    method: 'GET',
+    path: '/api/repositories/:owner/:repo',
+    desc: 'Fetch the latest stored analysis for a repository.',
+  },
+  {
+    method: 'GET',
+    path: '/api/repositories/:owner/:repo/history',
+    desc: 'Historical health snapshots for trends over 30 / 90 / 365 days.',
+  },
+  {
+    method: 'GET',
+    path: '/widget/repo/:owner/:repo',
+    desc: 'Render an embeddable widget SVG. Query: type, theme, size.',
+  },
+  {
+    method: 'GET',
+    path: '/badge/:owner/:repo',
+    desc: 'Render a compact badge SVG. Query: theme, size.',
+  },
+  {
+    method: 'POST',
+    path: '/api/github/webhooks',
+    desc: 'Receives GitHub App webhook deliveries and re-scores the repository.',
+  },
+];
+
+/* -------------------------------------------------------------------------- */
+/*  Self-hosting                                                              */
+/* -------------------------------------------------------------------------- */
+
+export type EnvVar = {
+  name: string;
+  required: boolean;
+  desc: string;
+};
+
+export const envVars: EnvVar[] = [
+  {
+    name: 'GITHUB_TOKEN',
+    required: true,
+    desc: 'A GitHub token used to read repositories via the API (higher rate limits).',
+  },
+  {
+    name: 'DATABASE_URL',
+    required: true,
+    desc: 'Postgres connection string for persisting analyses and history (Prisma).',
+  },
+  {
+    name: 'AI_PROVIDER',
+    required: false,
+    desc: 'Summary provider: heuristic (default, offline), openai, or anthropic.',
+  },
+  {
+    name: 'OPENAI_API_KEY',
+    required: false,
+    desc: 'Key for the OpenAI summary provider (only if AI_PROVIDER=openai).',
+  },
+  {
+    name: 'ANTHROPIC_API_KEY',
+    required: false,
+    desc: 'Key for the Anthropic summary provider (only if AI_PROVIDER=anthropic).',
+  },
+  {
+    name: 'GITHUB_APP_ID',
+    required: false,
+    desc: 'GitHub App id — set when running the self-hosted App for webhook re-scoring.',
+  },
+  {
+    name: 'GITHUB_WEBHOOK_SECRET',
+    required: false,
+    desc: 'Shared secret used to verify incoming webhook deliveries.',
+  },
+];
+
+/* -------------------------------------------------------------------------- */
+/*  Docs navigation                                                           */
+/* -------------------------------------------------------------------------- */
+
+/** In-page anchors for the /docs sidebar. Content lives in the docs page. */
+export const docsSections = [
+  { id: 'introduction', label: 'Introduction' },
+  { id: 'quickstart', label: 'Quickstart' },
+  { id: 'beacon-score', label: 'The Beacon Score' },
+  { id: 'widgets', label: 'Widgets' },
+  { id: 'github-app', label: 'GitHub App' },
+  { id: 'cli', label: 'CLI reference' },
+  { id: 'api', label: 'REST API' },
+  { id: 'self-hosting', label: 'Self-hosting' },
+] as const;
+
+/* -------------------------------------------------------------------------- */
+/*  Pricing (open-source honest)                                             */
+/* -------------------------------------------------------------------------- */
+
+export type PricingTier = {
+  name: string;
+  price: string;
+  cadence?: string;
+  tagline: string;
+  /** Real & available today, vs. roadmap / not purchasable. */
+  status: 'available' | 'planned';
+  features: string[];
+  cta: { label: string; href: string; external?: boolean };
+  highlight?: boolean;
+};
+
+/**
+ * Honest pricing for an open-source project: one REAL free self-hosted tier,
+ * plus clearly-labelled PLANNED hosted tiers. Planned tiers are not
+ * purchasable — their CTAs point at GitHub / docs, never a fake checkout.
+ */
+export const pricingTiers: PricingTier[] = [
+  {
+    name: 'Open Source',
+    price: 'Free',
+    cadence: 'forever',
+    tagline: 'Self-hosted. MIT licensed. The whole platform.',
+    status: 'available',
+    highlight: true,
+    features: [
+      'Beacon Score across all five pillars',
+      'CLI, REST API, and dashboard',
+      'All six embeddable widgets + badges',
+      'Self-hostable GitHub App (webhook re-scoring)',
+      'Historical health snapshots & trends',
+      'Pluggable AI summaries (heuristic / OpenAI / Anthropic)',
+      'No seat limits — run it on your own infra',
+    ],
+    cta: { label: 'Get it on GitHub', href: site.github, external: true },
+  },
+  {
+    name: 'Team',
+    price: 'TBD',
+    tagline: 'A hosted Beacon so you don’t run the infra.',
+    status: 'planned',
+    features: [
+      'Hosted dashboard & API — nothing to deploy',
+      'Managed GitHub App install',
+      'Scheduled re-scoring & history retention',
+      'Org-wide repository overview',
+      'Email / Slack health alerts',
+    ],
+    cta: { label: 'Follow on GitHub', href: site.github, external: true },
+  },
+  {
+    name: 'Enterprise',
+    price: 'TBD',
+    tagline: 'For orgs that need control and support.',
+    status: 'planned',
+    features: [
+      'SSO / SAML & audit logging',
+      'Private / GitHub Enterprise Server support',
+      'Custom scoring weights & policies',
+      'SLA-backed support',
+      'On-prem or private-cloud deployment',
+    ],
+    cta: { label: 'Read the docs', href: '/docs', external: false },
   },
 ];

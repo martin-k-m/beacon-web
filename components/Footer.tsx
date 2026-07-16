@@ -7,16 +7,17 @@ const groups: { title: string; links: FooterLink[] }[] = [
   {
     title: 'Product',
     links: [
-      { label: 'Features', href: '#features' },
-      { label: 'Demo', href: '#demo' },
-      { label: 'Architecture', href: '#architecture' },
+      { label: 'Features', href: '/#features' },
+      { label: 'Docs', href: '/docs' },
+      { label: 'Showcase', href: '/showcase' },
+      { label: 'Pricing', href: '/pricing' },
     ],
   },
   {
     title: 'Source',
     links: [
       { label: 'GitHub', href: site.github, external: true },
-      { label: 'Documentation', href: site.docs, external: true },
+      { label: 'Docs (in-repo)', href: site.docs, external: true },
       { label: `License (${site.license})`, href: `${site.github}/blob/main/LICENSE`, external: true },
     ],
   },

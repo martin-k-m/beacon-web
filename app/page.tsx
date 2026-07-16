@@ -2,6 +2,7 @@ import { Nav } from '@/components/Nav';
 import { Hero } from '@/components/Hero';
 import { Features } from '@/components/Features';
 import { DemoDashboard } from '@/components/DemoDashboard';
+import { WidgetsTeaser } from '@/components/WidgetsTeaser';
 import { OpenSource } from '@/components/OpenSource';
 import { ArchitectureDiagram } from '@/components/ArchitectureDiagram';
 import { Ecosystem } from '@/components/Ecosystem';
@@ -16,6 +17,8 @@ export default function Home() {
         <Features />
         {/* Demo dashboard — clearly labeled sample/demo data */}
         <DemoDashboard />
+        {/* Embeddable widget system — self-drawn previews, sample data */}
+        <WidgetsTeaser />
         <OpenSource />
         <ArchitectureDiagram />
         <Ecosystem />
