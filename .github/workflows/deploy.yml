@@ -35,7 +35,11 @@ jobs:
           cache: npm
 
       - name: Configure Pages
+        # enablement: true turns on Pages (source = GitHub Actions) on the first
+        # run if it hasn't been enabled in the repo settings yet.
         uses: actions/configure-pages@v5
+        with:
+          enablement: true
 
       - name: Install dependencies
         run: npm ci
