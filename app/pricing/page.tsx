@@ -9,7 +9,7 @@ import { pricingTiers, site, type PricingTier } from '@/lib/site';
 export const metadata: Metadata = {
   title: 'Pricing — Beacon',
   description:
-    'Beacon is open source and free to self-host under the MIT license. Hosted Team and Enterprise tiers are planned (roadmap, not yet purchasable).',
+    'Beacon is free and open source under the MIT license — the whole platform, self-hosted, with no paywalled features.',
   alternates: { canonical: 'https://beacon.blinkdev.me/pricing' },
 };
 
@@ -23,19 +23,12 @@ export default function PricingPage() {
           <div className="container-x relative">
             <SectionHeading
               eyebrow="Pricing"
-              title="Free and open source — hosting is optional"
-              description="Beacon is MIT licensed and fully self-hostable today: the whole platform, no seat limits, no paywalled features. Managed hosting is on the roadmap for teams that would rather not run the infrastructure."
+              title="Free and open source"
+              description="Beacon is MIT licensed and fully self-hostable: the whole platform — CLI, SDK, API, dashboard, widgets, and worker — with no seat limits and no paywalled features."
               align="center"
             />
 
-            <Reveal delay={0.06} className="mx-auto mt-8 flex justify-center">
-              <span className="inline-flex items-center gap-2 rounded-full border border-line bg-slate/60 px-3 py-1 font-mono text-[11px] uppercase tracking-widest text-muted">
-                <span className="h-1.5 w-1.5 rounded-full bg-beacon" />
-                One tier is real today · hosted tiers are roadmap
-              </span>
-            </Reveal>
-
-            <div className="mx-auto mt-14 grid max-w-5xl items-start gap-5 md:grid-cols-3">
+            <div className="mx-auto mt-14 grid max-w-md items-start gap-5">
               {pricingTiers.map((tier, i) => (
                 <Reveal key={tier.name} delay={0.05 + i * 0.08}>
                   <TierCard tier={tier} />
@@ -45,12 +38,13 @@ export default function PricingPage() {
 
             <Reveal delay={0.2} className="mx-auto mt-12 max-w-3xl rounded-lg border border-line bg-slate/40 p-6 text-center">
               <p className="text-sm leading-relaxed text-muted">
-                <span className="font-semibold text-mist">Roadmap, not a store.</span>{' '}
-                Beacon has no hosted service yet and nothing here is purchasable.
-                The Team and Enterprise columns describe where a managed offering
-                could go — prices are undecided. The way to use Beacon today is to{' '}
+                <span className="font-semibold text-mist">Run it your way.</span>{' '}
+                Deploy Beacon on your own infrastructure with{' '}
+                <span className="font-mono text-mist">docker compose up</span>, or
+                install the CLI with{' '}
+                <span className="font-mono text-mist">npm i -g @beacon/cli</span>.{' '}
                 <a href={site.github} target="_blank" rel="noreferrer noopener" className="text-beacon hover:text-gold">
-                  run it yourself
+                  Star it on GitHub
                 </a>
                 .
               </p>
@@ -64,8 +58,6 @@ export default function PricingPage() {
 }
 
 function TierCard({ tier }: { tier: PricingTier }) {
-  const planned = tier.status === 'planned';
-
   return (
     <div
       className={`relative flex h-full flex-col rounded-xl border p-6 ${
@@ -78,15 +70,9 @@ function TierCard({ tier }: { tier: PricingTier }) {
         <h3 className="font-mono text-sm font-semibold uppercase tracking-widest text-mist">
           {tier.name}
         </h3>
-        {tier.highlight ? (
-          <span className="rounded-full border border-beacon/50 bg-beacon/10 px-2 py-0.5 font-mono text-[9px] uppercase tracking-widest text-beacon">
-            Available now
-          </span>
-        ) : (
-          <span className="rounded-full border border-line bg-abyss/60 px-2 py-0.5 font-mono text-[9px] uppercase tracking-widest text-muted">
-            Planned
-          </span>
-        )}
+        <span className="rounded-full border border-beacon/50 bg-beacon/10 px-2 py-0.5 font-mono text-[9px] uppercase tracking-widest text-beacon">
+          MIT
+        </span>
       </div>
 
       <div className="mt-5 flex items-baseline gap-2">
@@ -121,13 +107,8 @@ function TierCard({ tier }: { tier: PricingTier }) {
           <DocsIcon width={15} height={15} />
         ) : null}
         {tier.cta.label}
-        {!planned && <ArrowIcon width={15} height={15} />}
+        <ArrowIcon width={15} height={15} />
       </a>
-      {planned && (
-        <p className="mt-3 text-center font-mono text-[10px] uppercase tracking-widest text-faint">
-          Not yet available
-        </p>
-      )}
     </div>
   );
 }

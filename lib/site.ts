@@ -452,63 +452,31 @@ export type PricingTier = {
   price: string;
   cadence?: string;
   tagline: string;
-  /** Real & available today, vs. roadmap / not purchasable. */
-  status: 'available' | 'planned';
   features: string[];
   cta: { label: string; href: string; external?: boolean };
   highlight?: boolean;
 };
 
 /**
- * Honest pricing for an open-source project: one REAL free self-hosted tier,
- * plus clearly-labelled PLANNED hosted tiers. Planned tiers are not
- * purchasable — their CTAs point at GitHub / docs, never a fake checkout.
+ * Beacon is free and open source (MIT) — the whole platform, self-hosted, with
+ * no paywalled features. This is the single, real offering.
  */
 export const pricingTiers: PricingTier[] = [
   {
     name: 'Open Source',
     price: 'Free',
     cadence: 'forever',
-    tagline: 'Self-hosted. MIT licensed. The whole platform.',
-    status: 'available',
+    tagline: 'The whole platform. Self-hosted. MIT licensed.',
     highlight: true,
     features: [
       'Beacon Score across all five pillars',
-      'CLI, REST API, and dashboard',
+      'CLI, SDK, REST API, and dashboard',
       'All six embeddable widgets + badges',
       'Self-hostable GitHub App (webhook re-scoring)',
-      'Historical health snapshots & trends',
+      'Background worker + historical health trends',
       'Pluggable AI summaries (heuristic / OpenAI / Anthropic)',
-      'No seat limits — run it on your own infra',
+      'No seat limits — run it on your own infrastructure',
     ],
     cta: { label: 'Get it on GitHub', href: site.github, external: true },
-  },
-  {
-    name: 'Team',
-    price: 'TBD',
-    tagline: 'A hosted Beacon so you don’t run the infra.',
-    status: 'planned',
-    features: [
-      'Hosted dashboard & API — nothing to deploy',
-      'Managed GitHub App install',
-      'Scheduled re-scoring & history retention',
-      'Org-wide repository overview',
-      'Email / Slack health alerts',
-    ],
-    cta: { label: 'Follow on GitHub', href: site.github, external: true },
-  },
-  {
-    name: 'Enterprise',
-    price: 'TBD',
-    tagline: 'For orgs that need control and support.',
-    status: 'planned',
-    features: [
-      'SSO / SAML & audit logging',
-      'Private / GitHub Enterprise Server support',
-      'Custom scoring weights & policies',
-      'SLA-backed support',
-      'On-prem or private-cloud deployment',
-    ],
-    cta: { label: 'Read the docs', href: '/docs', external: false },
   },
 ];

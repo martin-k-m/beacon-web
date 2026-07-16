@@ -65,9 +65,8 @@ sync with `@beacon/core` in the tool repo.
   self-hosting.
 - **`/showcase`** — a gallery of the embeddable widgets in dark/light themes
   with copy-paste embed snippets and "in context" mockups (all sample data).
-- **`/pricing`** — an honest open-source pricing page: a real free
-  self-hosted (MIT) tier plus clearly-labelled *Planned* hosted tiers (not
-  purchasable).
+- **`/pricing`** — Beacon is free and open source (MIT), self-hosted, with no
+  paywalled features.
 
 All widget previews on the site are **self-drawn inline SVGs with sample
 data**, clearly labelled — they resemble the real widgets but are not live
