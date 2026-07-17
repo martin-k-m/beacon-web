@@ -440,19 +440,22 @@ export const envVars: EnvVar[] = [
     desc: 'Postgres connection string for persisting analyses and history (Prisma).',
   },
   {
-    name: 'AI_PROVIDER',
+    // Must stay BEACON_-prefixed: this is the exact key the API and worker
+    // validate (apps/*/src/config.ts). A bare AI_PROVIDER is ignored, and the
+    // app silently falls back to heuristic summaries with no error.
+    name: 'BEACON_AI_PROVIDER',
     required: false,
     desc: 'Summary provider: heuristic (default, offline), openai, or anthropic.',
   },
   {
     name: 'OPENAI_API_KEY',
     required: false,
-    desc: 'Key for the OpenAI summary provider (only if AI_PROVIDER=openai).',
+    desc: 'Key for the OpenAI summary provider (only if BEACON_AI_PROVIDER=openai).',
   },
   {
     name: 'ANTHROPIC_API_KEY',
     required: false,
-    desc: 'Key for the Anthropic summary provider (only if AI_PROVIDER=anthropic).',
+    desc: 'Key for the Anthropic summary provider (only if BEACON_AI_PROVIDER=anthropic).',
   },
   {
     name: 'GITHUB_APP_ID',
