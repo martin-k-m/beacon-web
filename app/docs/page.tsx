@@ -227,8 +227,16 @@ npm run dev`}
       <H3>Option C — the CLI</H3>
       <p>
         Prefer the terminal? Install the{' '}
-        <code className="font-mono text-mist">@martin-k-m/beacon-cli</code> client globally
-        and analyze any repository — no server required.
+        <a
+          href={site.npm}
+          target="_blank"
+          rel="noreferrer"
+          className="font-mono text-beacon hover:text-gold"
+        >
+          @martin-k-m/beacon-cli
+        </a>{' '}
+        client globally and analyze any repository — no server required. It ships
+        as a single self-contained bundle with zero runtime dependencies.
       </p>
       <CodeBlock
         label="bash"

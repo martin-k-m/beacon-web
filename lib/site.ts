@@ -41,6 +41,9 @@ export const site = {
   cliCommand: 'beacon analyze owner/repo',
   // How to install the terminal client.
   cliInstall: 'npm install -g @martin-k-m/beacon-cli',
+  // The published package — live on npm. The CLI is the only published
+  // artifact; every @beacon/* workspace package is private.
+  npm: 'https://www.npmjs.com/package/@martin-k-m/beacon-cli',
 } as const;
 
 /**
