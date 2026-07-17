@@ -61,7 +61,7 @@ sync with `@beacon/analytics` in the tool repo.
   30 / 90 / 365 days.
 - **AI "Beacon Summary"** — pluggable providers (offline heuristic by default,
   or OpenAI / Anthropic).
-- **Surfaces** — a first-class `beacon` CLI (`npm install -g @beacon/cli`:
+- **Surfaces** — a first-class `beacon` CLI (`npm install -g @martin-k-m/beacon-cli`:
   `analyze`, `insights`, `contributors`, `dependencies`, `history`, `widget`,
   `badge`, `watch`, …), the `@beacon/sdk` client, a Fastify REST API, and a
   Next.js dashboard, all reading from the same analysis engine.

@@ -36,10 +36,11 @@ export const site = {
   license: 'MIT',
   language: 'TypeScript',
   // Real command implemented by the CLI (`beacon analyze owner/repo`). The CLI
-  // is published as `@beacon/cli` — install it globally with `npm install -g`.
+  // is published as `@martin-k-m/beacon-cli` — install it globally with
+  // `npm install -g`. The command it installs is `beacon`.
   cliCommand: 'beacon analyze owner/repo',
   // How to install the terminal client.
-  cliInstall: 'npm install -g @beacon/cli',
+  cliInstall: 'npm install -g @martin-k-m/beacon-cli',
 } as const;
 
 /**

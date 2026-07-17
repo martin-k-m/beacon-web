@@ -227,7 +227,7 @@ npm run dev`}
       <H3>Option C — the CLI</H3>
       <p>
         Prefer the terminal? Install the{' '}
-        <code className="font-mono text-mist">@beacon/cli</code> client globally
+        <code className="font-mono text-mist">@martin-k-m/beacon-cli</code> client globally
         and analyze any repository — no server required.
       </p>
       <CodeBlock
