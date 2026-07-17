@@ -58,7 +58,7 @@ export function ArchitectureDiagram() {
               {/* Engine block wrapping the three internal stages */}
               <rect x={186} y={150} width={348} height={92} rx={8} fill="none" stroke="#2A3444" strokeWidth="1.2" strokeDasharray="4 6" />
               <text x={200} y={168} fill="#8B95A7" fontSize="11" letterSpacing="3" style={{ fontFamily: 'var(--font-jetbrains), monospace' }}>
-                @beacon/core — ANALYSIS ENGINE
+                @beacon/analytics — ANALYSIS ENGINE
               </text>
               <MiniNode x={200} y={186} w={100} label="Snapshot" />
               <MiniNode x={310} y={186} w={100} label="Scoring" />

@@ -12,6 +12,10 @@ import {
   WidgetIcon,
   WebhookIcon,
   HistoryIcon,
+  AdvisorIcon,
+  TeamHealthIcon,
+  ShieldIcon,
+  PulseIcon,
 } from './icons';
 
 const features = [
@@ -26,14 +30,9 @@ const features = [
     desc: 'A deterministic 0–100 Beacon Score across five weighted pillars — Activity, Community, Maintenance, Documentation, and Security — with an Excellent-to-Critical grade.',
   },
   {
-    icon: PeopleIcon,
-    title: 'Contributor Analytics',
-    desc: 'See the contributor base, the balance of external contribution, and who is carrying the project — with each pillar backed by explainable reasons.',
-  },
-  {
-    icon: TimelineIcon,
-    title: 'Timelines & Trends',
-    desc: 'Weekly commit-activity histograms and release cadence reveal whether a project is accelerating, steady, or stalling over the last year.',
+    icon: AdvisorIcon,
+    title: 'AI Advisor',
+    desc: 'Grounded, prioritized recommendations — why a repository’s health changed and a concrete fix for each issue, ranked by impact. Read them with `beacon insights`.',
   },
   {
     icon: SparkleIcon,
@@ -41,9 +40,39 @@ const features = [
     desc: 'A natural-language "Beacon Summary" — headline, paragraph, highlights, and risks — from pluggable providers: an offline heuristic by default, or OpenAI / Anthropic.',
   },
   {
+    icon: PeopleIcon,
+    title: 'Contributor Analytics',
+    desc: 'See the contributor base, the balance of external contribution, and who is carrying the project — with each pillar backed by explainable reasons.',
+  },
+  {
+    icon: TeamHealthIcon,
+    title: 'Team Health & Bus Factor',
+    desc: 'Bus factor, maintainer load, and contribution distribution — spot the projects riding on a single person before they stall. Run `beacon contributors`.',
+  },
+  {
     icon: DependencyIcon,
-    title: 'Dependency & Security Signals',
-    desc: 'Language breakdown plus dependency manifests and security signals — security policy, Dependabot, and vulnerability alerts — feed the Security pillar.',
+    title: 'Dependency Intelligence',
+    desc: 'Classifies a project’s dependencies as current, outdated, or unmaintained against npm, PyPI, and crates.io registries. Run `beacon dependencies`.',
+  },
+  {
+    icon: ShieldIcon,
+    title: 'Security Signals',
+    desc: 'Security policy, Dependabot, and vulnerability-alert signals feed the Security pillar, with explainable reasons behind the score.',
+  },
+  {
+    icon: TimelineIcon,
+    title: 'Timelines & Trends',
+    desc: 'Weekly commit-activity histograms and release cadence reveal whether a project is accelerating, steady, or stalling over the last year.',
+  },
+  {
+    icon: PulseIcon,
+    title: 'Continuous Monitoring',
+    desc: 'Webhooks record repository events and re-score on every change, building an event timeline and health history you read back with `beacon history`.',
+  },
+  {
+    icon: HistoryIcon,
+    title: 'Health History',
+    desc: 'Beacon snapshots scores over time, so you can see trends across 30, 90, and 365 days — “health improved 4% this month” instead of a single point in time.',
   },
   {
     icon: WidgetIcon,
@@ -52,13 +81,8 @@ const features = [
   },
   {
     icon: WebhookIcon,
-    title: 'GitHub App & Monitoring',
-    desc: 'A self-hostable GitHub App listens for push, pull_request, issues, release, star, and fork webhooks and re-scores a repository as it changes — no manual re-runs.',
-  },
-  {
-    icon: HistoryIcon,
-    title: 'Health History',
-    desc: 'Beacon snapshots scores over time, so you can see trends across 30, 90, and 365 days — “health improved 4% this month” instead of a single point in time.',
+    title: 'Self-hostable GitHub App',
+    desc: 'A GitHub App listens for push, pull_request, issues, release, star, and fork webhooks and re-scores a repository as it changes — no manual re-runs.',
   },
 ];
 

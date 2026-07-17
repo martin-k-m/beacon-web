@@ -86,8 +86,10 @@ export default function DocsPage() {
               <Introduction />
               <Quickstart />
               <BeaconScore />
+              <AiAdvisor />
               <Widgets />
               <GithubApp />
+              <Monitoring />
               <Cli />
               <RestApi />
               <SelfHosting />
@@ -159,17 +161,20 @@ function Introduction() {
         weighted pillars, and generates a natural-language summary.
       </p>
       <p>
-        The same analysis engine (<code className="font-mono text-mist">@beacon/core</code>)
-        powers every surface — a CLI, a Fastify REST API, and a Next.js
-        dashboard — so they always agree on the numbers. Beacon also ships an
-        embeddable widget system, a self-hostable GitHub App for webhook
-        re-scoring, and historical health snapshots.
+        The same analysis engine powers every surface — a CLI, a Fastify REST
+        API, and a Next.js dashboard — so they always agree on the numbers.
+        Beacon also ships an AI Advisor for prioritized recommendations,
+        dependency and team-health analysis, an embeddable widget system, a
+        self-hostable GitHub App for continuous re-scoring, and historical
+        health snapshots.
       </p>
       <ul className="space-y-2">
         {[
           'Deterministic 0–100 health score with explainable pillars',
+          'AI Advisor — why health changed and prioritized, fixable issues',
+          'Dependency intelligence (npm / PyPI / crates.io) and team health / bus factor',
           'Six embeddable SVG widgets + a maintenance badge',
-          'Self-hostable GitHub App that re-scores on webhooks',
+          'Continuous monitoring — webhooks re-score and build an event timeline',
           'Historical snapshots and trends over 30 / 90 / 365 days',
           'Pluggable AI summaries: heuristic (default), OpenAI, or Anthropic',
         ].map((f) => (
@@ -219,10 +224,24 @@ npm run dev`}
         <a href="#self-hosting" className="text-beacon hover:text-gold">Self-hosting</a>) for
         higher GitHub API rate limits.
       </p>
+      <H3>Option C — the CLI</H3>
+      <p>
+        Prefer the terminal? Install the{' '}
+        <code className="font-mono text-mist">@beacon/cli</code> client globally
+        and analyze any repository — no server required.
+      </p>
+      <CodeBlock
+        label="bash"
+        code={`${site.cliInstall}
+${site.cliCommand}`}
+      />
       <Note>
-        Beacon is not published to a package registry yet, so run the CLI from
-        the monorepo rather than installing it globally. Check the repo README
-        for the current workspace scripts.
+        Beacon runs with zero configuration — no database, Redis, GitHub token,
+        or AI key required. Without a token it uses anonymous GitHub access or
+        bundled demo data; add a token and{' '}
+        <code className="font-mono text-mist">DATABASE_URL</code> to persist
+        history. See the <a href="#cli" className="text-beacon hover:text-gold">CLI reference</a>{' '}
+        for every command.
       </Note>
     </Section>
   );
@@ -296,7 +315,60 @@ function BeaconScore() {
 }
 
 /* -------------------------------------------------------------------------- */
-/*  4. Widgets                                                                */
+/*  4. AI Advisor                                                             */
+/* -------------------------------------------------------------------------- */
+
+function AiAdvisor() {
+  return (
+    <Section id="ai-advisor" title="AI Advisor">
+      <p>
+        The Beacon Score tells you <span className="text-mist">where</span> a
+        repository stands. The AI Advisor tells you{' '}
+        <span className="text-mist">why it moved</span> and{' '}
+        <span className="text-mist">what to do next</span>. It reads the same
+        snapshot and pillar reasons the score is built from, so every
+        recommendation is grounded in the repository&rsquo;s real signals — no
+        guesswork.
+      </p>
+      <ul className="space-y-2">
+        {[
+          'A short explanation of why health changed since the last snapshot',
+          'Prioritized issues (High / Medium / Low), each with a concrete fix',
+          'Grounded in the pillar reasons — nothing the score can’t back up',
+        ].map((f) => (
+          <li key={f} className="flex items-start gap-2.5">
+            <CheckIcon width={16} height={16} className="mt-0.5 shrink-0 text-beacon" />
+            <span>{f}</span>
+          </li>
+        ))}
+      </ul>
+      <p>Read it from the terminal:</p>
+      <CodeBlock label="bash" code={`beacon insights ${SAMPLE}`} />
+      <p>Or over HTTP:</p>
+      <CodeBlock
+        label="bash"
+        code={`curl https://${embed.hostPlaceholder}/api/repositories/${SAMPLE}/insights`}
+      />
+      <p>
+        Team and dependency health power the same recommendations —{' '}
+        <code className="font-mono text-mist">beacon contributors</code> reports
+        the bus factor and maintainer load, and{' '}
+        <code className="font-mono text-mist">beacon dependencies</code>{' '}
+        classifies your dependencies as current, outdated, or unmaintained
+        against npm, PyPI, and crates.io.
+      </p>
+      <Note>
+        The Advisor uses your configured AI provider (heuristic by default, or
+        OpenAI / Anthropic). Hosted providers fall back to the offline heuristic
+        on any error, so <code className="font-mono text-mist">beacon insights</code>{' '}
+        always returns something useful.
+      </Note>
+    </Section>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/*  5. Widgets                                                                */
 /* -------------------------------------------------------------------------- */
 
 function Widgets() {
@@ -445,7 +517,48 @@ function GithubApp() {
 }
 
 /* -------------------------------------------------------------------------- */
-/*  6. CLI reference                                                          */
+/*  Continuous monitoring                                                     */
+/* -------------------------------------------------------------------------- */
+
+function Monitoring() {
+  return (
+    <Section id="monitoring" title="Continuous monitoring">
+      <p>
+        Beacon does not just score a repository once. With the{' '}
+        <a href="#github-app" className="text-beacon hover:text-gold">GitHub App</a>{' '}
+        installed, every subscribed webhook is recorded as an event and triggers
+        a re-score — so the health history builds itself as the project moves.
+      </p>
+      <div className="my-2 flex flex-wrap items-center gap-2 font-mono text-[13px] text-muted">
+        <span className="rounded border border-line bg-slate/40 px-2 py-1 text-mist">webhook event</span>
+        <span className="text-beacon">→</span>
+        <span className="rounded border border-line bg-slate/40 px-2 py-1 text-mist">record + re-score</span>
+        <span className="text-beacon">→</span>
+        <span className="rounded border border-line bg-slate/40 px-2 py-1 text-mist">event timeline</span>
+      </div>
+      <p>
+        Read the recorded timeline from the terminal or the API — the events
+        endpoint returns each webhook-driven change, and the history endpoint
+        returns the score snapshots behind the 30 / 90 / 365-day trends.
+      </p>
+      <CodeBlock label="bash" code={`beacon history ${SAMPLE}`} />
+      <CodeBlock
+        label="bash"
+        code={`curl https://${embed.hostPlaceholder}/api/repositories/${SAMPLE}/events`}
+      />
+      <Note>
+        Monitoring is optional — Beacon works fine as a one-shot analyzer
+        without it. The event timeline and trends only fill in once the GitHub
+        App is delivering webhooks and a{' '}
+        <code className="font-mono text-mist">DATABASE_URL</code> is set to
+        persist history.
+      </Note>
+    </Section>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/*  CLI reference                                                             */
 /* -------------------------------------------------------------------------- */
 
 function Cli() {
@@ -453,7 +566,8 @@ function Cli() {
     <Section id="cli" title="CLI reference">
       <p>
         The <code className="font-mono text-mist">beacon</code> CLI wraps the
-        same engine as the API and dashboard. Four commands:
+        same engine as the API and dashboard. Install it with{' '}
+        <code className="font-mono text-mist">{site.cliInstall}</code>, then:
       </p>
       <div className="space-y-6">
         {cliCommands.map((c) => (
@@ -482,8 +596,9 @@ function RestApi() {
   return (
     <Section id="api" title="REST API">
       <p>
-        The Fastify API exposes analyses, history, widgets, and the webhook
-        receiver over HTTP. Key endpoints:
+        The Fastify API exposes analyses, insights, team and dependency health,
+        history, the event timeline, widgets, and the webhook receiver over
+        HTTP. Key endpoints:
       </p>
       <div className="overflow-hidden rounded-md border border-line">
         <table className="w-full border-collapse text-sm">
@@ -518,6 +633,11 @@ function RestApi() {
       <CodeBlock
         label="bash"
         code={`curl https://${embed.hostPlaceholder}/api/repositories/beacon-labs/aurora/history?range=90`}
+      />
+      <H3>Example — AI Advisor insights</H3>
+      <CodeBlock
+        label="bash"
+        code={`curl https://${embed.hostPlaceholder}/api/repositories/beacon-labs/aurora/insights`}
       />
     </Section>
   );

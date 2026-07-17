@@ -37,9 +37,10 @@ export function Hero() {
           transition={{ duration: 0.7, delay: 0.18 }}
           className="mt-6 max-w-2xl text-balance text-base leading-relaxed text-muted sm:text-lg"
         >
-          Beacon analyzes repository health, activity, contributors, and trends
-          into actionable insights — a single health score, five pillars, an AI
-          summary, and <a href="/showcase" className="text-mist underline decoration-beacon/40 underline-offset-4 hover:decoration-beacon">embeddable widgets</a> for any{' '}
+          Beacon analyzes repository health, contributors, dependencies, and
+          trends into actionable insights — a single health score, AI
+          recommendations, continuous monitoring, and{' '}
+          <a href="/showcase" className="text-mist underline decoration-beacon/40 underline-offset-4 hover:decoration-beacon">embeddable widgets</a> for any{' '}
           <code className="text-mist">owner/repo</code>.
         </motion.p>
 

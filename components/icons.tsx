@@ -186,6 +186,46 @@ export function HistoryIcon(props: SVGProps<SVGSVGElement>) {
   );
 }
 
+/** AI advisor / recommendation — lightbulb. */
+export function AdvisorIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M9.5 18h5M10.5 21h3" />
+      <path d="M12 3a6 6 0 0 0-3.6 10.8c.5.4.85 1 .9 1.65l.05.55h5.3l.05-.55c.05-.65.4-1.25.9-1.65A6 6 0 0 0 12 3Z" />
+    </svg>
+  );
+}
+
+/** Team health / bus factor — a maintainer within the group. */
+export function TeamHealthIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base} {...props}>
+      <circle cx="12" cy="7.5" r="3" />
+      <path d="M6 20a6 6 0 0 1 12 0" />
+      <path d="M4.5 13 3 11.5 4.5 10M19.5 13 21 11.5 19.5 10" />
+    </svg>
+  );
+}
+
+/** Security / shield with a check. */
+export function ShieldIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M12 3l7 3v5c0 4.4-3 7.7-7 9-4-1.3-7-4.6-7-9V6l7-3Z" />
+      <path d="M9 12l2 2 4-4" />
+    </svg>
+  );
+}
+
+/** Continuous monitoring / event pulse. */
+export function PulseIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M3 12h4l2-5 3 10 2-7 1.5 3H21" />
+    </svg>
+  );
+}
+
 export function CheckIcon(props: SVGProps<SVGSVGElement>) {
   return (
     <svg {...base} {...props}>

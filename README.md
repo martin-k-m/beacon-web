@@ -2,8 +2,8 @@
 
 The marketing site for **Beacon**, an open-source **GitHub repository
 intelligence platform**. Beacon turns any repository into a clear health score
-and actionable insights — activity, contributors, timelines, languages, and an
-AI-generated summary.
+and actionable insights — activity, contributors, dependencies, timelines,
+prioritized AI recommendations, and continuous monitoring.
 
 Live at **https://beacon.blinkdev.me**.
 
@@ -31,7 +31,7 @@ rewritten, or labeled as roadmap**. Concretely, this site avoids:
 
 Site copy lives in [`lib/site.ts`](lib/site.ts) — the header comment there
 restates this rule. Keep the feature list, pillars, and grades in that file in
-sync with `@beacon/core` in the tool repo.
+sync with `@beacon/analytics` in the tool repo.
 
 ## What Beacon actually does (verifiable in the repo)
 
@@ -41,28 +41,38 @@ sync with `@beacon/core` in the tool repo.
 - **Repository intelligence** — a full snapshot from the GitHub API: metadata,
   languages, contributors, commit activity, releases, issues, PRs, README, and
   security signals.
+- **AI Advisor** — grounded, prioritized recommendations: *why* a repo's health
+  changed and a concrete fix for each issue (`beacon insights`; API
+  `/api/repositories/:owner/:repo/insights`).
+- **Dependency intelligence** — classifies dependencies as current / outdated /
+  unmaintained against npm, PyPI, and crates.io (`beacon dependencies`).
+- **Team health** — bus factor, maintainer load, and contribution distribution
+  (`beacon contributors`; API `.../contributors`).
+- **Continuous monitoring** — a self-hostable GitHub App receives `push`,
+  `pull_request`, `issues`, `release`, `star`, and `fork` webhooks, records each
+  as an event, and re-scores repositories as they change — an event timeline you
+  read back with `beacon history` (API `.../events`). You register your own app;
+  there is no public installable app.
 - **Embeddable widgets** — six SVG widgets (Repository Health Card, Activity
   Graph, Language, Contributor, Release cards, and a Maintenance Badge) served
   from a self-hosted Beacon instance, themeable (dark / light / transparent)
   and sizeable.
-- **Self-hostable GitHub App** — receives `push`, `pull_request`, `issues`,
-  `release`, `star`, and `fork` webhooks and re-scores repositories as they
-  change (you register your own app; there is no public installable app).
 - **Historical analytics** — health snapshots over time, with trends over
   30 / 90 / 365 days.
 - **AI "Beacon Summary"** — pluggable providers (offline heuristic by default,
   or OpenAI / Anthropic).
-- **Surfaces** — a `beacon analyze | widget | badge | watch owner/repo` CLI, a
-  Fastify REST API, and a Next.js dashboard, all reading from the same
-  `@beacon/core` engine.
+- **Surfaces** — a first-class `beacon` CLI (`npm install -g @beacon/cli`:
+  `analyze`, `insights`, `contributors`, `dependencies`, `history`, `widget`,
+  `badge`, `watch`, …), the `@beacon/sdk` client, a Fastify REST API, and a
+  Next.js dashboard, all reading from the same analysis engine.
 
 ## Pages
 
 - **`/`** — landing page: hero, features, sample dashboard, widget teaser,
   open source, architecture.
 - **`/docs`** — the primary documentation (sidebar + content): introduction,
-  quickstart, the Beacon Score, widgets, GitHub App, CLI, REST API, and
-  self-hosting.
+  quickstart, the Beacon Score, the AI Advisor, widgets, GitHub App, continuous
+  monitoring, CLI, REST API, and self-hosting.
 - **`/showcase`** — a gallery of the embeddable widgets in dark/light themes
   with copy-paste embed snippets and "in context" mockups (all sample data).
 
@@ -99,8 +109,8 @@ app/
   showcase/                  /showcase — widget gallery + in-context mockups
 components/
   Nav / Hero / HeroBeacon    Header + hero with the lighthouse-sweep visual
-  Features                   Repository-intelligence capabilities (incl. widgets,
-                             GitHub App, health history)
+  Features                   Repository-intelligence capabilities (incl. AI Advisor,
+                             dependency & team health, monitoring, widgets)
   DemoDashboard              Sample repo dashboard (labeled demo data)
   WidgetsTeaser              Landing-page widget preview section
   OpenSource                 Honest open-source facts + monorepo contents

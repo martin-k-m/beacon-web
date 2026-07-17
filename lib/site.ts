@@ -26,7 +26,7 @@ export const site = {
   tagline: 'Understand any GitHub repository instantly.',
   // Honest one-liner about what this is.
   summary:
-    'An open-source GitHub repository intelligence platform. Beacon analyzes repository health, activity, contributors, and trends into a clear score and actionable insights.',
+    'An open-source GitHub repository intelligence platform. Beacon scores repository health, surfaces AI recommendations, tracks dependencies and team health, and monitors repositories continuously — a clear score and actionable insights.',
   // Status is about the project, not adoption. Newly published, MIT, self-hostable.
   status: 'Open source · MIT · newly published',
   github: 'https://github.com/martin-k-m/beacon',
@@ -35,9 +35,11 @@ export const site = {
   docs: 'https://github.com/martin-k-m/beacon#readme',
   license: 'MIT',
   language: 'TypeScript',
-  // Real command implemented by the CLI (`beacon analyze owner/repo`). Built
-  // from the monorepo — not yet published to npm, so we don't imply `npm i -g`.
+  // Real command implemented by the CLI (`beacon analyze owner/repo`). The CLI
+  // is published as `@beacon/cli` — install it globally with `npm install -g`.
   cliCommand: 'beacon analyze owner/repo',
+  // How to install the terminal client.
+  cliInstall: 'npm install -g @beacon/cli',
 } as const;
 
 /**
@@ -51,7 +53,7 @@ export const nav = [
 ] as const;
 
 /**
- * The five health-score pillars, matching @beacon/core's scoring engine.
+ * The five health-score pillars, matching @beacon/analytics' scoring engine.
  * `weight` values are the actual pillar weights from the engine (sum to 1).
  */
 export type Pillar = {
@@ -95,7 +97,7 @@ export const pillars: Pillar[] = [
 ];
 
 /**
- * Health grade bands, exactly as @beacon/core computes them.
+ * Health grade bands, exactly as @beacon/analytics computes them.
  */
 export const grades = [
   { label: 'Excellent', min: 90 },
@@ -124,7 +126,12 @@ export const monorepo: RepoPart[] = [
   {
     name: 'apps/api',
     kind: 'app',
-    description: 'A Fastify REST API that serves analyses over HTTP.',
+    description: 'A Fastify REST API that serves analyses, widgets, and webhooks.',
+  },
+  {
+    name: 'apps/worker',
+    kind: 'app',
+    description: 'A background queue consumer that re-scores repositories on events.',
   },
   {
     name: 'apps/cli',
@@ -132,19 +139,34 @@ export const monorepo: RepoPart[] = [
     description: 'The `beacon` CLI — analyze any repo from your terminal.',
   },
   {
-    name: 'packages/core',
+    name: 'packages/analytics',
     kind: 'package',
-    description: 'The analysis engine: GitHub client, scoring, and AI summaries.',
+    description: 'The engine: scoring, trends, the analyze orchestrator, and team health.',
+  },
+  {
+    name: 'packages/ai-advisor',
+    kind: 'package',
+    description: 'Recommendations engine — why health changed and what to do next.',
+  },
+  {
+    name: 'packages/dependency-engine',
+    kind: 'package',
+    description: 'Dependency classification against npm, PyPI, and crates.io.',
+  },
+  {
+    name: 'packages/widgets',
+    kind: 'package',
+    description: 'Embeddable SVG widgets and badges.',
+  },
+  {
+    name: 'packages/sdk',
+    kind: 'package',
+    description: 'A programmatic client: `Beacon.analyze(...)`.',
   },
   {
     name: 'packages/database',
     kind: 'package',
-    description: 'Prisma schema and client for persisting analyses.',
-  },
-  {
-    name: 'packages/config',
-    kind: 'package',
-    description: 'Shared TypeScript and ESLint configuration.',
+    description: 'Prisma schema and client for persisting analyses and history.',
   },
 ];
 
@@ -273,6 +295,46 @@ Beacon Score  92 / 100   Excellent
 Summary  Thriving, well-maintained project — watch the bus factor.`,
   },
   {
+    command: 'beacon insights owner/repo',
+    summary: 'Show the AI Advisor — why health changed and prioritized fixes.',
+    example: 'beacon insights beacon-labs/aurora',
+    output: `beacon-labs/aurora — insights
+Why  Community dipped 6 pts — external contribution fell this quarter.
+  ! High    Bus factor is 1 — 82% of commits are from one maintainer.
+            → Invite a co-maintainer and document the release process.
+  ! Medium  No SECURITY.md — Security pillar capped at 70.
+            → Add a security policy with a disclosure contact.`,
+  },
+  {
+    command: 'beacon contributors owner/repo',
+    summary: 'Report team health — bus factor, maintainer load, and distribution.',
+    example: 'beacon contributors beacon-labs/aurora',
+    output: `beacon-labs/aurora — team health
+Bus factor    1     (82% of commits by top contributor)
+Maintainers   3 active · 1 carrying the load
+  ada        ██████████  82%
+  lin        ███         11%
+  sam        ██           7%`,
+  },
+  {
+    command: 'beacon dependencies owner/repo',
+    summary: 'Classify dependencies as current, outdated, or unmaintained.',
+    example: 'beacon dependencies beacon-labs/aurora',
+    output: `beacon-labs/aurora — dependencies (npm)
+  current       28
+  outdated       5   fastify 4.2 → 5.1, zod 3.22 → 3.24, …
+  unmaintained   1   left-pad (no release in 3y)`,
+  },
+  {
+    command: 'beacon history owner/repo',
+    summary: 'Print the recorded event timeline and health over time.',
+    example: 'beacon history beacon-labs/aurora',
+    output: `beacon-labs/aurora — history
+2026-07-16  release  v1.4.0    92  ↑ +3
+2026-07-02  push     14 commits 89
+2026-06-20  issues   closed 8   88`,
+  },
+  {
     command: 'beacon widget owner/repo',
     summary: 'Print an embeddable widget SVG (or a URL) for the repository.',
     example: 'beacon widget beacon-labs/aurora --type health --theme dark',
@@ -319,6 +381,21 @@ export const apiEndpoints: ApiEndpoint[] = [
     method: 'GET',
     path: '/api/repositories/:owner/:repo/history',
     desc: 'Historical health snapshots for trends over 30 / 90 / 365 days.',
+  },
+  {
+    method: 'GET',
+    path: '/api/repositories/:owner/:repo/insights',
+    desc: 'AI Advisor output — why health changed and prioritized, fixable issues.',
+  },
+  {
+    method: 'GET',
+    path: '/api/repositories/:owner/:repo/contributors',
+    desc: 'Team health — bus factor, maintainer load, and contribution distribution.',
+  },
+  {
+    method: 'GET',
+    path: '/api/repositories/:owner/:repo/events',
+    desc: 'The recorded event timeline of webhook-driven repository changes.',
   },
   {
     method: 'GET',
@@ -394,8 +471,10 @@ export const docsSections = [
   { id: 'introduction', label: 'Introduction' },
   { id: 'quickstart', label: 'Quickstart' },
   { id: 'beacon-score', label: 'The Beacon Score' },
+  { id: 'ai-advisor', label: 'AI Advisor' },
   { id: 'widgets', label: 'Widgets' },
   { id: 'github-app', label: 'GitHub App' },
+  { id: 'monitoring', label: 'Continuous monitoring' },
   { id: 'cli', label: 'CLI reference' },
   { id: 'api', label: 'REST API' },
   { id: 'self-hosting', label: 'Self-hosting' },
