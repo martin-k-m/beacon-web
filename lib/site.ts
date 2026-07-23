@@ -165,7 +165,7 @@ export const monorepo: RepoPart[] = [
   {
     name: 'packages/sdk',
     kind: 'package',
-    description: 'A programmatic client: `Beacon.analyze(...)`.',
+    description: 'A programmatic client: `new Beacon().analyze(...)`.',
   },
   {
     name: 'packages/database',
@@ -321,13 +321,18 @@ Maintainers   3 active · 1 carrying the load
   sam        ██           7%`,
   },
   {
-    command: 'beacon dependencies owner/repo',
-    summary: 'Classify dependencies as current, outdated, or unmaintained.',
-    example: 'beacon dependencies beacon-labs/aurora',
-    output: `beacon-labs/aurora — dependencies (npm)
-  current       28
-  outdated       5   fastify 4.2 → 5.1, zod 3.22 → 3.24, …
-  unmaintained   1   left-pad (no release in 3y)`,
+    // Deliberately no `owner/repo` argument: `dependencies` reads the manifests
+    // in the working directory (package.json, requirements.txt, pyproject.toml,
+    // Cargo.toml) and the CLI registers no repository argument for it.
+    command: 'beacon dependencies',
+    summary: "Classify the current project's dependencies as current, outdated, or unmaintained.",
+    example: 'beacon dependencies',
+    output: `Dependencies
+  ✓ fastify        5.1.0  → 5.1.0   [current]
+  ⚠ zod            3.22.4 → 3.24.1  [outdated]
+  ✗ left-pad       1.3.0  → 1.3.0   [unmaintained]
+
+  28 current  ·  5 outdated  ·  1 unmaintained`,
   },
   {
     command: 'beacon history owner/repo',
@@ -373,8 +378,11 @@ export type ApiEndpoint = {
 export const apiEndpoints: ApiEndpoint[] = [
   {
     method: 'POST',
+    // The body is validated by a zod schema that takes a single `repo` string
+    // ("owner/repo" or a GitHub URL) plus an optional `refresh` — NOT separate
+    // owner/repo fields. Sending { owner, repo } fails repository parsing.
     path: '/api/analyze',
-    desc: 'Analyze a repository on demand — body { owner, repo } — returns the full analysis.',
+    desc: 'Analyze a repository on demand — body { repo, refresh? } — returns the full analysis.',
   },
   {
     method: 'GET',
@@ -384,7 +392,12 @@ export const apiEndpoints: ApiEndpoint[] = [
   {
     method: 'GET',
     path: '/api/repositories/:owner/:repo/history',
-    desc: 'Historical health snapshots for trends over 30 / 90 / 365 days.',
+    desc: 'Past analysis runs for a repository, newest first (requires a database).',
+  },
+  {
+    method: 'GET',
+    path: '/api/repositories/:owner/:repo/trend',
+    desc: 'Health trend plus the underlying series. Query: range=30d | 90d | 1y | all.',
   },
   {
     method: 'GET',
@@ -422,49 +435,57 @@ export const apiEndpoints: ApiEndpoint[] = [
 /*  Self-hosting                                                              */
 /* -------------------------------------------------------------------------- */
 
+/**
+ * NOTHING here is strictly required — Beacon's zero-config guarantee means the
+ * API and CLI boot with no database, no Redis, no GitHub token, and no AI key
+ * (`.env.example`: "Every value has a sensible default"). Marking a variable
+ * "required" would contradict that guarantee and the quickstart note on this
+ * same page. `recommended` mirrors the tool's own docs/self-hosting.md, which
+ * lists these under a "Recommended" column for a production deployment.
+ */
 export type EnvVar = {
   name: string;
-  required: boolean;
+  recommended: boolean;
   desc: string;
 };
 
 export const envVars: EnvVar[] = [
   {
     name: 'GITHUB_TOKEN',
-    required: true,
-    desc: 'A GitHub token used to read repositories via the API (higher rate limits).',
+    recommended: true,
+    desc: 'A GitHub token used to read repositories. Without one you get GitHub’s 60 req/hour anonymous limit.',
   },
   {
     name: 'DATABASE_URL',
-    required: true,
-    desc: 'Postgres connection string for persisting analyses and history (Prisma).',
+    recommended: true,
+    desc: 'Postgres connection string. Without it analyses are computed on demand and no history is stored.',
   },
   {
     // Must stay BEACON_-prefixed: this is the exact key the API and worker
     // validate (apps/*/src/config.ts). A bare AI_PROVIDER is ignored, and the
     // app silently falls back to heuristic summaries with no error.
     name: 'BEACON_AI_PROVIDER',
-    required: false,
+    recommended: false,
     desc: 'Summary provider: heuristic (default, offline), openai, or anthropic.',
   },
   {
     name: 'OPENAI_API_KEY',
-    required: false,
+    recommended: false,
     desc: 'Key for the OpenAI summary provider (only if BEACON_AI_PROVIDER=openai).',
   },
   {
     name: 'ANTHROPIC_API_KEY',
-    required: false,
+    recommended: false,
     desc: 'Key for the Anthropic summary provider (only if BEACON_AI_PROVIDER=anthropic).',
   },
   {
     name: 'GITHUB_APP_ID',
-    required: false,
+    recommended: false,
     desc: 'GitHub App id — set when running the self-hosted App for webhook re-scoring.',
   },
   {
     name: 'GITHUB_WEBHOOK_SECRET',
-    required: false,
+    recommended: false,
     desc: 'Shared secret used to verify incoming webhook deliveries.',
   },
 ];

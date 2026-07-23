@@ -635,12 +635,12 @@ function RestApi() {
         label="bash"
         code={`curl -X POST https://${embed.hostPlaceholder}/api/analyze \\
   -H 'content-type: application/json' \\
-  -d '{"owner":"beacon-labs","repo":"aurora"}'`}
+  -d '{"repo":"beacon-labs/aurora"}'`}
       />
       <H3>Example — historical trend</H3>
       <CodeBlock
         label="bash"
-        code={`curl https://${embed.hostPlaceholder}/api/repositories/beacon-labs/aurora/history?range=90`}
+        code={`curl 'https://${embed.hostPlaceholder}/api/repositories/beacon-labs/aurora/trend?range=90d'`}
       />
       <H3>Example — AI Advisor insights</H3>
       <CodeBlock
@@ -664,12 +664,18 @@ function SelfHosting() {
       </p>
 
       <H3>Environment variables</H3>
+      <p>
+        None of these are mandatory — Beacon boots with no database, no Redis, no
+        GitHub token, and no AI key. The two marked{' '}
+        <code className="font-mono text-mist">yes</code> are what a real
+        deployment wants; everything else is opt-in.
+      </p>
       <div className="overflow-hidden rounded-md border border-line">
         <table className="w-full border-collapse text-sm">
           <thead>
             <tr className="border-b border-line bg-slate/50 text-left font-mono text-[11px] uppercase tracking-widest text-muted">
               <th className="px-4 py-2.5 font-medium">Variable</th>
-              <th className="px-4 py-2.5 font-medium">Req</th>
+              <th className="px-4 py-2.5 font-medium">Rec</th>
               <th className="px-4 py-2.5 font-medium">Purpose</th>
             </tr>
           </thead>
@@ -678,7 +684,7 @@ function SelfHosting() {
               <tr key={v.name} className="border-b border-line last:border-0 align-top">
                 <td className="px-4 py-3 font-mono text-[13px] text-mist">{v.name}</td>
                 <td className="px-4 py-3">
-                  {v.required ? (
+                  {v.recommended ? (
                     <span className="font-mono text-[11px] text-beacon">yes</span>
                   ) : (
                     <span className="font-mono text-[11px] text-faint">opt</span>

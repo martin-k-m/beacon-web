@@ -96,8 +96,9 @@ Requires Node 20+.
 
 ```bash
 npm install
-npm run dev      # http://localhost:3000
-npm run build    # static export to ./out
+npm run dev        # http://localhost:3000
+npm run typecheck  # tsc --noEmit
+npm run build      # static export to ./out
 ```
 
 ## Structure
@@ -133,6 +134,5 @@ settings, set **Source** to **GitHub Actions**.
 
 ## License
 
-This website repository does not currently include a `LICENSE` file. The Beacon
-tool itself is licensed **MIT** (see the
-[tool repository](https://github.com/martin-k-m/beacon)).
+MIT — see [LICENSE](LICENSE). The Beacon tool itself is also MIT licensed (see
+the [tool repository](https://github.com/martin-k-m/beacon)).

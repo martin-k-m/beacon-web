@@ -6,10 +6,14 @@ import { site, monorepo } from '@/lib/site';
 import { GitHubIcon, DocsIcon, TerminalIcon, ServerIcon, GridIcon } from './icons';
 
 // Verifiable, structural facts about the project — no adoption numbers.
+// The monorepo count is `apps/*` and `packages/*` in martin-k-m/beacon:
+// 4 apps (api, cli, web, worker) and 12 packages (ai, ai-advisor, analytics,
+// config, database, dependency-engine, github, plugins, sdk, shared, ui,
+// widgets). Re-check it against the repo before changing it.
 const facts = [
   { k: site.license, v: 'License' },
   { k: site.language, v: 'Language' },
-  { k: 'Monorepo', v: '3 apps · 3 packages' },
+  { k: 'Monorepo', v: '4 apps · 12 packages' },
   { k: 'Self-host', v: 'Run it yourself' },
 ];
 
